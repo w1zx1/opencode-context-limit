@@ -35,7 +35,7 @@ Add the plugin path to the global `~/.config/opencode/opencode.json`:
 ```
 
 This option requires both exports from `package.json`: the server one
-(`index.ts`) and the TUI one (`tui.ts`). They are already configured.
+(`src/index.ts`) and the TUI one (`src/tui.ts`). They are already configured.
 
 ## Usage
 
@@ -76,11 +76,12 @@ npm run typecheck # tsc --noEmit
 Structure:
 
 ```text
-index.ts    server plugin: model transform, RPC, storage, synchronization
-tui.ts      TUI plugin: palette command and context-limit picker dialog
-rpc.ts      shared RPC definition for the server and TUI parts
-presets.ts  presets and pure limit-application logic
-test/       tests
+src/
+  index.ts    server plugin: model transform, RPC, storage, synchronization
+  tui.ts      TUI plugin: palette command and context-limit picker dialog
+  rpc.ts      shared RPC definition for the server and TUI parts
+  presets.ts  presets and pure limit-application logic
+test/         tests
 ```
 
 The server and TUI parts communicate over RPC:

@@ -6,7 +6,7 @@ mock.module("@opencode/plugin/tui", () => ({
   Plugin: { define: (plugin: unknown) => plugin },
 }))
 
-const { default: plugin } = await import("../tui")
+const { default: plugin } = await import("../src/tui")
 
 interface Toast {
   message: string

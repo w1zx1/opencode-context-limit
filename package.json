@@ -5,9 +5,9 @@
   "type": "module",
   "description": "Set one shared context-window limit for every model in OpenCode",
   "exports": {
-    ".": "./index.ts",
-    "./tui": "./tui.ts",
-    "./rpc": "./rpc.ts"
+    ".": "./src/index.ts",
+    "./tui": "./src/tui.ts",
+    "./rpc": "./src/rpc.ts"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { applyContextLimit, formatContext, normalizeContext, PRESETS } from "../presets"
+import { applyContextLimit, formatContext, normalizeContext, PRESETS } from "../src/presets"
 
 function model(context: number, output: number, input?: number) {
   return { limit: { context, output, ...(input === undefined ? {} : { input }) } }
