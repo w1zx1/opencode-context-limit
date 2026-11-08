@@ -1,10 +1,10 @@
-# Context Limit for OpenCode V2
+# opencode-context-limit
 
 The plugin sets one shared context-window limit for all OpenCode models.
 
-Press `Ctrl+P`, choose **Context window**, select a preset and press `Enter` —
-the limit is applied to every model immediately. The value persists across
-restarts and is synced between open projects/locations.
+Pick a limit once and it applies to every model immediately, in the TUI and in
+OpenCode Desktop. The value persists across restarts and is synced between open
+projects/locations.
 
 ## Installation
 
@@ -14,18 +14,19 @@ restarts and is synced between open projects/locations.
 ./install.sh
 ```
 
-The script creates a symlink:
+The script builds the desktop GUI part and creates a symlink:
 
 ```text
 ~/.config/opencode/plugins/context-limit -> /path/to/opencode-context-limit
 ```
 
-OpenCode picks up plugins from this folder automatically. Restart the TUI after
-installing.
+OpenCode picks up plugins from this folder automatically, in both the TUI and
+OpenCode Desktop. Restart OpenCode after installing.
 
-### Option 2: via `opencode.json`
+### Option 2: via `opencode.json` (alternative)
 
-Add the plugin path to the global `~/.config/opencode/opencode.json`:
+If the checkout lives elsewhere, add the plugin path to the global
+`~/.config/opencode/opencode.json`:
 
 ```jsonc
 {
@@ -34,16 +35,38 @@ Add the plugin path to the global `~/.config/opencode/opencode.json`:
 }
 ```
 
-This option requires both exports from `package.json`: the server one
-(`src/index.ts`) and the TUI one (`src/tui.ts`). They are already configured.
+This option requires all exports from `package.json`: the server one
+(`src/index.ts`), the TUI one (`src/tui.ts`), and the prebuilt desktop one
+(`dist/gui-experimental.cjs`). They are already configured.
+
+This is optional: OpenCode Desktop also loads plugins from the global
+`plugins/` folder, so listing the path there is only needed when the plugin is
+not installed with `install.sh`.
+
+After changing `src/gui.tsx`, rebuild the desktop bundle:
+
+```sh
+bun run build   # or: npm run build
+```
 
 ## Usage
+
+### TUI
 
 1. Press `Ctrl+P`.
 2. Type `context` and choose **Context window**.
 3. Select a limit and press `Enter`.
 
 A slash command is also available: `/context-limit` (alias `/limit`).
+
+### OpenCode Desktop
+
+1. Type `/context-limit` (or `/limit`) in the composer and press `Enter`.
+2. Or open the command palette and choose **Context window**.
+3. Select a limit in the searchable dialog and press `Enter`.
+
+The dialog lists the same presets as the TUI, shows the current value, and
+applies the choice to every model right away.
 
 Presets: `8K`, `16K`, `32K`, `64K`, `128K`, `200K`, `256K`, `512K`, `1M`, as
 well as **Model default** — resets each model to its native limit.
@@ -69,8 +92,9 @@ edit `opencode.json`/`cli.json`.
 
 ```sh
 npm install
-npm test          # bun test: limit logic and TUI command
+npm test          # bun test: limit logic, TUI and GUI commands
 npm run typecheck # tsc --noEmit
+npm run build     # bundle the desktop GUI part into dist/
 ```
 
 Structure:
@@ -79,13 +103,19 @@ Structure:
 src/
   index.ts    server plugin: model transform, RPC, storage, synchronization
   tui.ts      TUI plugin: palette command and context-limit picker dialog
-  rpc.ts      shared RPC definition for the server and TUI parts
+  gui.tsx     desktop plugin: palette and slash commands, native select dialog
+  rpc.ts      shared RPC definition for the server, TUI and desktop parts
   presets.ts  presets and pure limit-application logic
 test/         tests
+dist/         built desktop bundle (gui-experimental.cjs)
 ```
 
-The server and TUI parts communicate over RPC:
+The server and client parts communicate over RPC:
 
 - `context-limit.get` — current value;
 - `context-limit.set` — set `{ context: number }`, where `0` clears the limit;
 - `changed` event — notifies all running locations about the new value.
+
+The desktop GUI is the `./gui-experimental` export. It is built by Vite with the
+`@opencode/plugin/gui/vite` preset and loaded by OpenCode Desktop from the
+plugin's own background server.
