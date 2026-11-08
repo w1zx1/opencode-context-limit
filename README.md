@@ -10,18 +10,32 @@ projects/locations.
 
 ### Option 1: global plugins folder (recommended)
 
+Unix:
+
 ```sh
 ./install.sh
 ```
 
-The script builds the desktop GUI part and creates a symlink:
+Windows (PowerShell):
 
-```text
-~/.config/opencode/plugins/context-limit -> /path/to/opencode-context-limit
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
-OpenCode picks up plugins from this folder automatically, in both the TUI and
-OpenCode Desktop. Restart OpenCode after installing.
+Both scripts build the desktop GUI part and copy the plugin files to:
+
+```text
+~/.config/opencode/plugins/context-limit/
+```
+
+They copy `src/`, `dist/`, `package.json`, and `README.md`, replacing a previous
+copy; `install.sh` also replaces an older symlink. OpenCode picks up plugins from
+this folder automatically, in both the TUI and OpenCode Desktop. Restart OpenCode
+after installing.
+
+After changing the sources, run the install script again to refresh the
+installed copy. On Windows, close OpenCode before updating an existing copy,
+because it keeps the loaded plugin files open.
 
 ### Option 2: via `opencode.json` (alternative)
 
