@@ -27,7 +27,7 @@ export function defineGuiPlugin(options: GuiPluginOptions) {
         "toast.title": "Context limit",
         "toast.unavailable": "Server plugin is unavailable",
         "toast.failed": "Could not apply the limit",
-        "toast.applied": "Every model now uses a {context} context window.",
+        "toast.applied": "Every model now uses a {{context}} context window.",
         "toast.reset": "Every model uses its native context window again.",
       },
     },

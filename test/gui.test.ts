@@ -87,7 +87,7 @@ function createContext(
     t: (key: string, params?: Record<string, string | number | boolean>) => {
       let text = ((plugin as any).i18n?.en?.[key] as string | undefined) ?? key
       for (const [name, value] of Object.entries(params ?? {})) {
-        text = text.replaceAll(`{${name}}`, String(value))
+        text = text.replaceAll(`{{${name}}}`, String(value))
       }
       return text
     },
@@ -130,7 +130,7 @@ describe("gui plugin", () => {
     expect(calls.invalidated).toBe(1)
     expect(calls.synced).toBe(1)
     expect(calls.toasts.at(-1)).toMatchObject({ variant: "success" })
-    expect(calls.toasts.at(-1)?.description).toContain("128K")
+    expect(calls.toasts.at(-1)?.description).toBe("Every model now uses a 128K context window.")
   })
 
   test("clears the limit", async () => {
